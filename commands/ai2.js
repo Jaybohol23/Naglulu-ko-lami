@@ -1,14 +1,14 @@
 const axios = require('axios');
 
 module.exports = {
-  name: "ai",
+  name: "ai2",
   description: "Ask a question using the API",
   prefixRequired: false,
   adminOnly: false,
   
   async execute(api, event, args) {
     if (args.length === 0) {
-      return api.sendMessage(global.convertToGothic("Please provide a question to ask. ex: ai pogi mo chill"), event.threadID, event.messageID);
+      return api.sendMessage(global.convertToGothic("Please provide a question to ask. ex: ai wat is black"), event.threadID, event.messageID);
     }
 
     const question = args.join(' ');
