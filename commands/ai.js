@@ -1,36 +1,27 @@
 const axios = require('axios');
 
-async function fetchAIResponse(query) {
-  const apiUrl = `https://betadash-api-swordslush.vercel.app/gpt?ask=${encodeURIComponent(query)}`;
-  try {
-    const response = await axios.get(apiUrl);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching AI response:', error);
-    return "Sorry, I couldn't get a response from the AI.";
-  }
-}
-
 module.exports = {
   name: "ai",
-  description: "Ask the AI any question you like.",
+  description: "Ask a question using the API",
   prefixRequired: false,
   adminOnly: false,
+  
   async execute(api, event, args) {
-    await api.sendMessage(global.convertToGothic("Answering plss wait..."), event.threadID, event.messageID);
-
     if (args.length === 0) {
-      return api.sendMessage(global.convertToGothic("Please provide a question."), event.threadID, event.messageID);
+      return api.sendMessage(global.convertToGothic("Please provide a question to ask. ex: ai pogi mo chill"), event.threadID, event.messageID);
     }
 
-    const query = args.join(" ");
-    const aiResponse = await fetchAIResponse(query);
+    const question = args.join(' ');
+    const apiUrl = `https://betadash-api-swordslush.vercel.app/gpt?ask=${encodeURIComponent(question)}`;
 
-    const formattedResponse = `🧩 | 𝘾𝙝𝙞𝙡𝙡𝙞 𝙂𝙥𝙩
-━━━━━━━━━━━━━━━━━━
-${global.convertToGothic(aiResponse)}
-━━━━━━━━━━━━━━━━━━`;
-
-    await api.sendMessage(formattedResponse, event.threadID, event.messageID);
+    try {
+      const response = await axios.get(apiUrl);
+      const answer = response.data.architecture || "No response received.";
+      const styledAnswer = global.convertToGothic(answer);
+      await api.sendMessage(styledAnswer, event.threadID, event.messageID);
+    } catch (error) {
+      console.error(error);
+      await api.sendMessage(global.convertToGothic("An error occurred while contacting the API."), event.threadID, event.messageID);
+    }
   },
 };
