@@ -17,7 +17,7 @@
         "100087212564100"
     ],
     "autoLoad": true,
-    "autopost": true,
+    "autopost": false,
     "autogreet": true, 
     "proxy": "http://49.157.62.203:8181" 
 }
