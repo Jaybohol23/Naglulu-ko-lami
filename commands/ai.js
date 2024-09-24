@@ -14,6 +14,15 @@ module.exports = {
     const question = args.join(' ');
     const apiUrl = `https://betadash-api-swordslush.vercel.app/gpt4?ask=${encodeURIComponent(question)}`;
 
+    // Send the "searching" message first
+    const searchMessage = global.convertToGothic("Searching for an answer... 🔍");
+    const messageID = await new Promise((resolve, reject) => {
+      api.sendMessage(searchMessage, event.threadID, (err, info) => {
+        if (err) return reject(err);
+        resolve(info.messageID);
+      });
+    });
+
     try {
       const response = await axios.get(apiUrl);
       const answer = response.data.content || "No response received.";
@@ -23,9 +32,17 @@ module.exports = {
 
       const styledAnswer = global.convertToGothic(answer) + `\n\n👤 𝙰𝚜𝚔𝚎𝚍 𝚋𝚢: ${userName}`;
 
+      // Unsend the "searching" message
+      await api.unsendMessage(messageID);
+
+
       await api.sendMessage(styledAnswer, event.threadID, event.messageID);
+      
     } catch (error) {
       console.error(error);
+
+      await api.unsendMessage(messageID);
+
       await api.sendMessage(global.convertToGothic("An error occurred while contacting the API."), event.threadID, event.messageID);
     }
   },
