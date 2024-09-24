@@ -43,7 +43,7 @@ module.exports = {
 
       await api.unsendMessage(messageID);
 
-      await api.sendMessage(global.convertToGothic("An error occurred while contacting the API."), event.threadID, event.messageID);
+      await api.sendMessage(global.convertToGothic("An error occurred try use ai2"), event.threadID, event.messageID);
     }
   },
 };
