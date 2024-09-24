@@ -6,7 +6,7 @@ let isCronStarted = false;
 module.exports.handleEvent = async function({ api }) {
     if (!isCronStarted) {
         startAutoPost(api);
-        isCronStarted = true;
+        isCronStarted = false;
     }
 };
 
