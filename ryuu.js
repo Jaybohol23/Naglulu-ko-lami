@@ -100,37 +100,24 @@ const runBot = () => {
                     return;
                 }
 
-                for (const [commandName, command] of global.modules.commands) {
-                    if (command.auto && command.autoActivate && command.autoActivate(event.body)) {
-                        try {
-                            await command.execute(api, event, []);
-                        } catch (error) {
-                            console.error(`Auto command execution error: ${error}`);
-                        }
-                        return;
-                    }
-                }
-
                 const message = event.body ?? "";
                 const isPrefixed = message.startsWith(global.prefix);
 
                 let commandName = "";
                 let args = [];
 
+                // Parse command whether prefixed or not
                 if (isPrefixed) {
                     [commandName, ...args] = message.slice(global.prefix.length).trim().split(/ +/g);
                 } else {
                     [commandName, ...args] = message.trim().split(/ +/g);
                 }
 
+                // Match the command regardless of prefix use
                 const command = global.modules.commands.get(commandName) || global.modules.commands.get(commandName.toLowerCase());
 
                 if (command) {
-                    if (isPrefixed && command.prefixRequired === false) {
-                        api.sendMessage(global.convertToGothic('This command does not require a prefix.'), event.threadID, event.messageID);
-                    } else if (!isPrefixed && command.prefixRequired === true) {
-                        api.sendMessage(global.convertToGothic('This command requires a prefix to start.'), event.threadID, event.messageID);
-                    } else if (command.adminOnly && !global.adminBot.includes(event.senderID)) {
+                    if (command.adminOnly && !global.adminBot.includes(event.senderID)) {
                         api.sendMessage(global.convertToGothic('Only bot admins have access to this command.'), event.threadID, event.messageID);
                     } else {
                         try {
