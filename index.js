@@ -34,6 +34,13 @@ const manageBotProcess = (script) => {
     botProcess.on("error", (error) => {
         console.error(`Error while starting ${script}: ${error.message}`);
     });
+
+    // Schedule auto-restart every 5 hours
+    setTimeout(() => {
+        console.log("Restarting bot automatically after 5 hours...");
+        manageBotProcess(script);
+    }, 18000000); // 5 hours in milliseconds
 };
 
+// Start the bot initially
 manageBotProcess("ryuu.js");
