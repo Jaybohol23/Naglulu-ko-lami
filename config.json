@@ -1,6 +1,6 @@
 {
-    "prefix": "!",
-    "owner": "Churchill Abing",
+    "prefix": "/",
+    "owner": "Jay D Bohol",
     "apiOptions": {
         "forceLogin": false,
          "pauseLog": true,
@@ -14,7 +14,7 @@
         "listenEvents": true
     },
     "adminBot": [
-        "100087212564100"
+        "61550037082227"
     ],
     "autoLoad": true,
     "autopost": true,
